@@ -73,11 +73,11 @@
       } else if (fmt === 1) {
         return `${euros} € ${cents} ct = <span class="blank" data-answer="${formatEuro(totalCents)}">_____ €</span>`;
       } else if (fmt === 2) {
-        return `${totalCents} ct = <span class="blank" data-e="${Math.floor(totalCents/100)}">__ €</span> <span class="blank" data-c="${totalCents%100}">__ ct</span>`;
+        return `${totalCents} ct = <span class="blank" data-e="${Math.floor(totalCents/100)}" data-c="${totalCents%100}">__ €</span> <span class="blank" data-e="${Math.floor(totalCents/100)}" data-c="${totalCents%100}">__ ct</span>`;
       } else if (fmt === 3) {
         return `${totalCents} ct = <span class="blank" data-answer="${formatEuro(totalCents)}">_____ €</span>`;
       } else if (fmt === 4) {
-        return `${formatEuro(totalCents)} = <span class="blank" data-e="${euros}">__ €</span> <span class="blank" data-c="${cents}">__ ct</span>`;
+        return `${formatEuro(totalCents)} = <span class="blank" data-e="${euros}" data-c="${cents}">__ €</span> <span class="blank" data-e="${euros}" data-c="${cents}">__ ct</span>`;
       } else if (fmt === 5) {
         return `${formatEuro(totalCents)} = <span class="blank" data-answer="${totalCents} ct">_____ ct</span>`;
       }
@@ -102,27 +102,14 @@
     function revealAnswer(e) {
       const span = e.target;
       const answer = span.getAttribute('data-answer');
-      const euro = span.getAttribute('data-e');
-      const cent = span.getAttribute('data-c');
-
       if (answer) {
         span.textContent = answer;
-      } else if (euro !== null && cent === null) {
-        span.textContent = euro + ' €';
-      } else if (euro === null && cent !== null) {
-        span.textContent = cent + ' ct';
       } else {
-        const blanks = span.parentNode.querySelectorAll('.blank');
-        blanks.forEach(el => {
-          const e = el.getAttribute('data-e');
-          const c = el.getAttribute('data-c');
-          if (e !== null) el.textContent = e + ' €';
-          if (c !== null) el.textContent = c + ' ct';
-        });
+        const blanks = taskEl.querySelectorAll('.blank');
+        blanks[0].textContent = blanks[0].getAttribute('data-e') + ' €';
+        blanks[1].textContent = blanks[1].getAttribute('data-c') + ' ct';
       }
-      if (!span.closest('#overlay')) {
-        nextBtn.style.display = 'inline-block';
-      }
+      nextBtn.style.display = 'inline-block';
     }
 
     nextBtn.addEventListener('click', generateTask);
